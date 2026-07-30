@@ -11,7 +11,6 @@ let whiteAmok;
 let swordSlashSound;
 let featherSound;
 let featherFont;
-let freesoundCredit;
 
 function preload(){
   yoyo = loadImage('pixelyoyo.png');
