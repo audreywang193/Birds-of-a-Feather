@@ -6,15 +6,12 @@ let y;
 let screen;
 let score;
 let glitchFont;
-let isCounting;
-let swarmFrame;
-let pressedAkuma;
 let amok;
 let whiteAmok;
 let swordSlashSound;
 let featherSound;
 let featherFont;
-
+let freesoundCredit;
 
 function preload(){
   yoyo = loadImage('pixelyoyo.png');
@@ -32,9 +29,7 @@ function setup() {
   aNum = 5;
   screen = 0;
   score = 0;
-  isCounting = false;
-  swarmFrame = 0;
-  
+
 
   akumas = new Group();
   akumas.collider = 'dynamic';
@@ -46,6 +41,8 @@ function setup() {
   akumas.layer = 1;
   akumas.image = amok;
   akumas.scale = 2.5;
+  akumas.swarmFrame = 0;
+  akumas.isCounting = false;
   for(let i = 0; i < aNum; i++){
     akuma = new akumas.Sprite();
     akumas[i].direction = random(0,360);
@@ -124,32 +121,32 @@ function draw() {
         
       }
       
-      if(akumas[i].mouse.presses()){
+      if(akumas[i].mouse.presses()&&!akumas[i].isCounting){
         
-        isCounting = true;
+        akumas[i].isCounting = true;
         score++;
-        pressedAkuma = i;
         featherSound.play();
+        
       }
 
 
-      if(isCounting&&swarmFrame<120){
-        swarmFrame++;
-        akumas[pressedAkuma].image = whiteAmok;
-        akumas[pressedAkuma].speed=0;
-        image(swarm, akumas[pressedAkuma].x, akumas[pressedAkuma].y,120,70);
+      if(akumas[i].isCounting&&akumas[i].swarmFrame<120){
+        akumas[i].swarmFrame++;
+        akumas[i].image = whiteAmok;
+        akumas[i].speed=0;
+        image(swarm, akumas[i].x, akumas[i].y,120,70);
         
       }
       
-      if(swarmFrame>=120&&isCounting){
-        akumas[pressedAkuma].image = amok;
-        akumas[pressedAkuma].x = random(0,600);
-        akumas[pressedAkuma].y = random(0,600);
-        akumas[pressedAkuma].direction = random(0,360);
-        akumas[pressedAkuma].speed = random(4,7);
-        akumas[pressedAkuma].rotationSpeed = random(-1,1);
-        swarmFrame=0;
-        isCounting=false;
+      if(akumas[i].swarmFrame>=120&&akumas[i].isCounting){
+        akumas[i].image = amok;
+        akumas[i].x = random(0,600);
+        akumas[i].y = random(0,600);
+        akumas[i].direction = random(0,360);
+        akumas[i].speed = random(4,7);
+        akumas[i].rotationSpeed = random(-1,1);
+        akumas[i].swarmFrame=0;
+        akumas[i].isCounting=false;
         
       }
       
@@ -173,6 +170,13 @@ function draw() {
     text('You Win',300,150);
     textSize(40);
     text('Click anywhere to play again',300,270);
+    textFont(glitchFont);
+    textSize(20);
+    noStroke();
+    text('Credits:',300,410);
+    text('ardentlyaudrey - development & art',300,440);
+    text('Sound Effects - David Dumais & freesound_community \non Pixabay',300,470);
+    text('Inspired by Among Us Clear Asteroids',300,525);
   }
 }
 
